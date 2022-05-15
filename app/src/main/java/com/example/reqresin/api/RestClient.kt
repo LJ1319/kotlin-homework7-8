@@ -15,7 +15,7 @@ object RestClient {
         ).build()
     }
 
-    private fun<S> getService(serviceClass: Class<S>) : S {
+    private fun <S> getService(serviceClass: Class<S>): S {
         return retrofit.create(serviceClass)
     }
 

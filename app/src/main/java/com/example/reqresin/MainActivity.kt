@@ -4,10 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.reqresin.api.RestClient
-import com.example.reqresin.api.dto.CRUD
-import com.example.reqresin.api.dto.ReqResData
-import com.example.reqresin.api.dto.Resource
-import com.example.reqresin.api.dto.User
+import com.example.reqresin.api.dto.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,13 +40,13 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
 
-                    val userId: Long? =  response.body()?.data?.id
+                    val userId: Long? = response.body()?.data?.id
                     val userEmail: String? = response.body()?.data?.email
                     val userFirstName: String? = response.body()?.data?.firstName
                     val userLastName: String? = response.body()?.data?.lastName
                     val userAvatar: String? = response.body()?.data?.avatar
 
-                    val userInfo: String = "$userId $userEmail $userFirstName $userLastName $userAvatar"
+                    val userInfo = "$userId $userEmail $userFirstName $userLastName $userAvatar"
 
                     Log.d("userInfo", userInfo)
 
@@ -78,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                 TODO("Not yet implemented")
             }
 
-        } )
+        })
 
 
         RestClient.reqResApi.getResource(2).enqueue(object : Callback<ReqResData<Resource>> {
@@ -95,7 +92,8 @@ class MainActivity : AppCompatActivity() {
                     val resourceColor: String? = response.body()?.data?.color
                     val resourcePantoneValue: String? = response.body()?.data?.pantoneValue
 
-                    val resource: String = "$resourceId $resourceName $resourceYear $resourceColor $resourcePantoneValue"
+                    val resource =
+                        "$resourceId $resourceName $resourceYear $resourceColor $resourcePantoneValue"
 
                     Log.d("resource", resource)
 
@@ -109,8 +107,16 @@ class MainActivity : AppCompatActivity() {
         })
 
 
-        RestClient.reqResApi.createUser("morpheus", "leader").enqueue(object : Callback<CRUD> {
-            override fun onResponse(call: Call<CRUD>, response: Response<CRUD>) {
+        val userInfo = Post(
+            name = "Alex",
+            job = "alex@gmail.com",
+            id = null,
+            createdAt = null
+        )
+
+
+        RestClient.reqResApi.createUser(userInfo).enqueue(object : Callback<Post> {
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
                 if (response.isSuccessful) {
                     val name: String? = response.body()?.name
                     val job: String? = response.body()?.job
@@ -123,29 +129,50 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<CRUD>, t: Throwable) {
+            override fun onFailure(call: Call<Post>, t: Throwable) {
                 TODO("Not yet implemented")
             }
 
         })
 
 
+        val patch = Patch(
+            name = "morpheus",
+            job = "zion resident",
+            updatedAt = null
+        )
 
-        RestClient.reqResApi.deleteUser(2).enqueue(object : Callback<ReqResData<User>> {
+        RestClient.reqResApi.patchUser(2, patch).enqueue(object : Callback<Patch> {
+            override fun onResponse(call: Call<Patch>, response: Response<Patch>) {
+                val name: String? = response.body()?.name
+                val job: String? = response.body()?.job
+                val updatedAt: String? = response.body()?.updatedAt
+
+                val updatedUser = "$name $job $updatedAt"
+
+                Log.d("UPDATED", updatedUser)
+            }
+
+            override fun onFailure(call: Call<Patch>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+        RestClient.reqResApi.deleteUser(2).enqueue(object : Callback<User> {
 
             override fun onResponse(
-                call: Call<ReqResData<User>>,
-                response: Response<ReqResData<User>>
+                call: Call<User>,
+                response: Response<User>
             ) {
-                Log.d("deleted", "DELETED")
+                Log.d("DELETED", "DELETED")
             }
 
-            override fun onFailure(call: Call<ReqResData<User>>, t: Throwable) {
+            override fun onFailure(call: Call<User>, t: Throwable) {
                 TODO("Not yet implemented")
             }
 
         })
-
 
 
     }

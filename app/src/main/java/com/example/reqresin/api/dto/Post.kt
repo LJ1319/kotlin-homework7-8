@@ -13,7 +13,7 @@ package com.example.reqresin.api.dto
 // }
 
 
-data class CRUD(
+data class Post(
     val name: String?,
     val job: String?,
     val id: String?,
