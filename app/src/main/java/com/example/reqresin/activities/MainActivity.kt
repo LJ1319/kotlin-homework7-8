@@ -1,8 +1,12 @@
-package com.example.reqresin
+package com.example.reqresin.activities
 
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.reqresin.R
+import com.example.reqresin.adapters.UserRecyclerAdapter
 import com.example.reqresin.api.RestClient
 import com.example.reqresin.api.dto.*
 import retrofit2.Call
@@ -10,9 +14,14 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var recyclerView: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        recyclerView = findViewById(R.id.recyclerView)
 
         RestClient.initClient()
         RestClient.reqResApi.getUsers(2).enqueue(object : Callback<ReqResData<List<User>>> {
@@ -22,7 +31,12 @@ class MainActivity : AppCompatActivity() {
                 response: Response<ReqResData<List<User>>>
             ) {
                 if (response.isSuccessful) {
-                    response.body()?.data?.forEach { user -> Log.d("users", user.toString()) }
+//                    response.body()?.data?.forEach { user -> Log.d("users", user.toString()) }
+
+                    response.body()?.data?.let {
+                        recyclerView.adapter = UserRecyclerAdapter(it)
+                        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+                    }
                 }
             }
 

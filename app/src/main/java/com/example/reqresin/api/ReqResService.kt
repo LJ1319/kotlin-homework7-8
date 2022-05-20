@@ -28,5 +28,4 @@ interface ReqResService {
     fun deleteUser(@Path("userId") id: Long): Call<User>
 
 
-
 }
