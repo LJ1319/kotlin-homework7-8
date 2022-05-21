@@ -1,6 +1,7 @@
 package com.example.reqresin.adapters
 
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,17 +18,23 @@ class ResourceRecyclerAdapter(private val resources: List<Resource>) :
         const val RESOURCE_ID = "RESOURCE_ID"
     }
 
-    class ResourceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    class ResourceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
 
         init {
             itemView.setOnClickListener(this)
         }
 
-        private val pantoneView: TextView = itemView.findViewById(R.id.textView5)
+        private val nameView: TextView = itemView.findViewById(R.id.textView5)
+        private val yearView: TextView = itemView.findViewById(R.id.textView6)
         private lateinit var resource: Resource
 
         fun onBind(resource: Resource) {
-            pantoneView.text = resource.pantoneValue
+            nameView.text = resource.name?.uppercase()
+            yearView.text = resource.year.toString()
+
+            nameView.setTextColor(Color.parseColor(resource.color))
+
             this.resource = resource
         }
 

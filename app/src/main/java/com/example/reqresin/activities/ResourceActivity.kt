@@ -1,5 +1,6 @@
 package com.example.reqresin.activities
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
@@ -13,13 +14,20 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ResourceActivity : AppCompatActivity() {
+    private lateinit var nameView: TextView
+    private lateinit var yearView: TextView
+    private lateinit var colorView: TextView
     private lateinit var pantoneView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resource)
 
-        pantoneView = findViewById(R.id.textView6)
+        nameView = findViewById(R.id.textView7)
+        yearView = findViewById(R.id.textView8)
+        colorView = findViewById(R.id.textView9)
+        pantoneView = findViewById(R.id.textView10)
+
 
         val resourceId = intent.extras?.getLong(RESOURCE_ID, -1)
 
@@ -32,6 +40,11 @@ class ResourceActivity : AppCompatActivity() {
                     ) {
                         if (response.isSuccessful) {
                             response.body()?.data?.let {
+                                nameView.text = it.name?.uppercase()
+                                nameView.setTextColor(Color.parseColor(it.color))
+                                yearView.text = it.year.toString()
+                                colorView.text = it.color
+                                colorView.setTextColor(Color.parseColor(it.color))
                                 pantoneView.text = it.pantoneValue
                             }
                         }
